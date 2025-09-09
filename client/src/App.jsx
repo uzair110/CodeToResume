@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Github } from 'lucide-react'
 import AuthProvider from './components/AuthProvider'
 import Dashboard from './components/Dashboard'
+import HeaderActions from './components/HeaderActions'
 import './App.css'
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
                   Commit Resume Generator
                 </h1>
               </div>
+              <HeaderActions />
             </div>
           </div>
         </header>

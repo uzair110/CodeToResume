@@ -1,6 +1,6 @@
 const express = require('express');
-const axios = require('axios');
 const { requireAuth } = require('./auth');
+const GitProviderFactory = require('../services/GitProviderFactory');
 const router = express.Router();
 
 // Apply authentication middleware to all routes
@@ -9,43 +9,45 @@ router.use(requireAuth);
 // Get user repositories
 router.get('/', async (req, res) => {
   try {
-    const response = await axios.get('https://api.github.com/user/repos', {
-      headers: {
-        'Authorization': `token ${req.githubToken}`,
-        'User-Agent': 'Commit-Resume-Generator'
-      },
-      params: {
-        sort: 'updated',
-        per_page: 100,
-        type: 'all'
-      }
-    });
+    const { sort = 'updated', type = 'all', per_page = 100 } = req.query;
+    
+    // Create GitHub provider instance
+    const provider = GitProviderFactory.createProvider('github', req.githubToken);
+    
+    // Validate parameters
+    const validSorts = ['updated', 'created', 'pushed', 'full_name'];
+    const validTypes = ['all', 'owner', 'public', 'private', 'member'];
+    
+    const options = {
+      sort: validSorts.includes(sort) ? sort : 'updated',
+      type: validTypes.includes(type) ? type : 'all',
+      per_page: Math.min(parseInt(per_page) || 100, 100),
+      direction: 'desc'
+    };
 
-    const repositories = response.data.map(repo => ({
-      id: repo.id,
-      name: repo.name,
-      full_name: repo.full_name,
-      description: repo.description,
-      private: repo.private,
-      default_branch: repo.default_branch,
-      updated_at: repo.updated_at,
-      language: repo.language,
-      url: repo.html_url
-    }));
+    const repositories = await provider.listRepositories(options);
 
     res.json({
       repositories,
-      total: repositories.length
+      total: repositories.length,
+      sort: options.sort,
+      type: options.type
     });
 
   } catch (error) {
-    console.error('Repository fetch error:', error.response?.data || error.message);
+    console.error('Repository fetch error:', error.message);
     
-    if (error.response?.status === 401) {
+    if (error.message.includes('401') || error.message.includes('Unauthorized')) {
       return res.status(401).json({ message: 'GitHub token expired or invalid' });
     }
     
-    res.status(500).json({ message: 'Failed to fetch repositories' });
+    if (error.message.includes('403') || error.message.includes('rate limit')) {
+      return res.status(403).json({ 
+        message: 'API rate limit exceeded. Please try again later.' 
+      });
+    }
+    
+    res.status(500).json({ message: error.message || 'Failed to fetch repositories' });
   }
 });
 
@@ -54,39 +56,25 @@ router.get('/:owner/:repo', async (req, res) => {
   try {
     const { owner, repo } = req.params;
     
-    const response = await axios.get(`https://api.github.com/repos/${owner}/${repo}`, {
-      headers: {
-        'Authorization': `token ${req.githubToken}`,
-        'User-Agent': 'Commit-Resume-Generator'
-      }
-    });
-
-    const repository = {
-      id: response.data.id,
-      name: response.data.name,
-      full_name: response.data.full_name,
-      description: response.data.description,
-      private: response.data.private,
-      default_branch: response.data.default_branch,
-      updated_at: response.data.updated_at,
-      language: response.data.language,
-      url: response.data.html_url
-    };
+    // Create GitHub provider instance
+    const provider = GitProviderFactory.createProvider('github', req.githubToken);
+    
+    const repository = await provider.getRepositoryDetails(owner, repo);
 
     res.json({ repository });
 
   } catch (error) {
-    console.error('Repository details error:', error.response?.data || error.message);
+    console.error('Repository details error:', error.message);
     
-    if (error.response?.status === 404) {
+    if (error.message.includes('404') || error.message.includes('Not Found')) {
       return res.status(404).json({ message: 'Repository not found' });
     }
     
-    if (error.response?.status === 401) {
+    if (error.message.includes('401') || error.message.includes('Unauthorized')) {
       return res.status(401).json({ message: 'Access denied to repository' });
     }
     
-    res.status(500).json({ message: 'Failed to fetch repository details' });
+    res.status(500).json({ message: error.message || 'Failed to fetch repository details' });
   }
 });
 

@@ -1,9 +1,12 @@
+import { useState } from 'react'
 import { useAuth } from './AuthProvider'
 import LoginForm from './LoginForm'
 import RepositorySelector from './RepositorySelector'
+import HomePage from './HomePage'
 
 export default function Dashboard() {
   const { user, loading, isAuthenticated } = useAuth()
+  const [currentView, setCurrentView] = useState('home') // 'home', 'repositories', 'analysis'
 
   if (loading) {
     return (
@@ -31,22 +34,20 @@ export default function Dashboard() {
     )
   }
 
+  const renderCurrentView = () => {
+    switch (currentView) {
+      case 'repositories':
+        return <RepositorySelector onBack={() => setCurrentView('home')} />
+      case 'analysis':
+        return <div>Analysis view coming soon...</div>
+      default:
+        return <HomePage onGetStarted={() => setCurrentView('repositories')} />
+    }
+  }
+
   return (
     <div className="space-y-8 fade-in">
-      <div className="bg-white rounded-lg shadow-sm p-6">
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h2 className="text-xl font-semibold text-gray-900">
-              Welcome back, {user.name || user.login}!
-            </h2>
-            <p className="text-gray-600 mt-1">
-              Select a repository to generate resume bullet points
-            </p>
-          </div>
-        </div>
-        
-        <RepositorySelector />
-      </div>
+      {renderCurrentView()}
     </div>
   )
 }
