@@ -55,6 +55,16 @@ class BaseGitProvider {
   async getRepositoryDetails(repositoryId) {
     throw new Error("getRepositoryDetails method must be implemented");
   }
+
+  /**
+   * Get repository contributors
+   * @param {string} owner - Repository owner
+   * @param {string} repo - Repository name
+   * @returns {Promise<Array>} - Array of contributor objects
+   */
+  async getRepositoryContributors(owner, repo) {
+    throw new Error("getRepositoryContributors method must be implemented");
+  }
 }
 
 module.exports = BaseGitProvider;

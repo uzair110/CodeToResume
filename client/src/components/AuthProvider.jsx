@@ -22,7 +22,11 @@ export default function AuthProvider({ children }) {
   const checkAuthStatus = async () => {
     try {
       const response = await api.get('/auth/status')
-      setUser(response.data.user)
+      if (response.data.authenticated && response.data.user) {
+        setUser(response.data.user)
+      } else {
+        setUser(null)
+      }
     } catch (error) {
       setUser(null)
     } finally {

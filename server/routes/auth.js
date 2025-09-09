@@ -53,9 +53,17 @@ router.post('/github', async (req, res) => {
     };
     req.session.githubToken = encrypt(token);
 
-    res.json({
-      success: true,
-      user: req.session.user
+    // Save session explicitly
+    req.session.save((err) => {
+      if (err) {
+        console.error('Session save error:', err);
+        return res.status(500).json({ message: 'Session save failed' });
+      }
+      
+      res.json({
+        success: true,
+        user: req.session.user
+      });
     });
 
   } catch (error) {

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Search, GitBranch, Lock, Globe, Filter, AlertCircle, ArrowLeft } from 'lucide-react'
 import api from '../services/api'
 
-export default function RepositorySelector({ onBack }) {
+export default function RepositorySelector({ onBack, onRepositorySelect }) {
   const [repositories, setRepositories] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -70,10 +70,10 @@ export default function RepositorySelector({ onBack }) {
       const response = await api.get(`/repositories/${repo.full_name.split('/')[0]}/${repo.full_name.split('/')[1]}`)
       
       if (response.data.repository) {
-        // TODO: Navigate to commit analysis phase
-        console.log('Repository validated and selected:', repo)
-        // For now, just show selection feedback
-        alert(`Selected: ${repo.name}\nNext: Implement commit fetching`)
+        // Navigate to commit analysis
+        if (onRepositorySelect) {
+          onRepositorySelect(repo)
+        }
       }
     } catch (error) {
       console.error('Repository validation failed:', error)

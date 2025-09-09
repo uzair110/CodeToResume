@@ -3,10 +3,12 @@ import { useAuth } from './AuthProvider'
 import LoginForm from './LoginForm'
 import RepositorySelector from './RepositorySelector'
 import HomePage from './HomePage'
+import CommitAnalyzer from './CommitAnalyzer'
 
 export default function Dashboard() {
   const { user, loading, isAuthenticated } = useAuth()
   const [currentView, setCurrentView] = useState('home') // 'home', 'repositories', 'analysis'
+  const [selectedRepository, setSelectedRepository] = useState(null)
 
   if (loading) {
     return (
@@ -34,12 +36,27 @@ export default function Dashboard() {
     )
   }
 
+  const handleRepositorySelect = (repository) => {
+    setSelectedRepository(repository)
+    setCurrentView('analysis')
+  }
+
   const renderCurrentView = () => {
     switch (currentView) {
       case 'repositories':
-        return <RepositorySelector onBack={() => setCurrentView('home')} />
+        return (
+          <RepositorySelector 
+            onBack={() => setCurrentView('home')}
+            onRepositorySelect={handleRepositorySelect}
+          />
+        )
       case 'analysis':
-        return <div>Analysis view coming soon...</div>
+        return (
+          <CommitAnalyzer 
+            repository={selectedRepository}
+            onBack={() => setCurrentView('repositories')}
+          />
+        )
       default:
         return <HomePage onGetStarted={() => setCurrentView('repositories')} />
     }

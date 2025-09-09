@@ -79,6 +79,12 @@ public
 tmp/
 temp/
 
+# Session files (contain sensitive auth data)
+server/sessions/
+
+# Session storage
+server/sessions/
+
 # Editor directories and files
 .vscode/
 .idea/

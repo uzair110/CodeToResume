@@ -25,8 +25,9 @@ api.interceptors.response.use(
   },
   (error) => {
     if (error.response?.status === 401) {
-      // Handle unauthorized access
-      window.location.reload()
+      // Handle unauthorized access - but don't auto-reload to prevent loops
+      console.warn('Authentication expired, user needs to login again')
+      // You could dispatch a logout action here instead of reloading
     }
     return Promise.reject(error)
   }
