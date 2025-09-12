@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { Github } from 'lucide-react'
 import AuthProvider from './components/AuthProvider'
 import Dashboard from './components/Dashboard'

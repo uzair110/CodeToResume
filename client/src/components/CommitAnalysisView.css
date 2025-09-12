@@ -1,0 +1,529 @@
+.commit-analysis-view {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.analysis-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.analysis-header h2 {
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.analysis-header p {
+  color: #666;
+  font-size: 16px;
+}
+
+.analysis-start {
+  text-align: center;
+  padding: 40px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.analyze-button {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 15px;
+}
+
+.analyze-button:hover:not(:disabled) {
+  background: #0056b3;
+}
+
+.analyze-button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.analysis-progress {
+  text-align: center;
+  padding: 40px;
+}
+
+.progress-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #007bff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.error-message {
+  background: #f8d7da;
+  border: 1px solid #f5c6cb;
+  color: #721c24;
+  padding: 20px;
+  border-radius: 6px;
+  margin: 20px 0;
+}
+
+.error-message h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.error-message button {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.analysis-summary {
+  background: #e7f3ff;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 30px;
+}
+
+.analysis-summary h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  color: #0056b3;
+}
+
+.summary-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 15px;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.stat .label {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 5px;
+}
+
+.stat .value {
+  font-size: 24px;
+  font-weight: bold;
+  color: #0056b3;
+}
+
+.bullet-point-groups {
+  margin-bottom: 30px;
+}
+
+.bullet-point-groups h3 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.bullet-group {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
+.group-header {
+  background: #f8f9fa;
+  padding: 15px 20px;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.group-header h4 {
+  margin: 0;
+  color: #333;
+  text-transform: capitalize;
+}
+
+.bullet-count {
+  background: #28a745;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+}
+
+.group-details {
+  padding: 15px 20px;
+  background: #fafafa;
+  border-bottom: 1px solid #eee;
+}
+
+.group-details > div {
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.group-details strong {
+  color: #333;
+}
+
+.group-commits {
+  padding: 0;
+}
+
+.commit-item {
+  padding: 15px 20px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.commit-item:last-child {
+  border-bottom: none;
+}
+
+.commit-message {
+  font-weight: 500;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.commit-analysis {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.commit-analysis span {
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.change-type {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.significance {
+  background: #f3e5f5;
+  color: #7b1fa2;
+}
+
+.complexity {
+  background: #fff3e0;
+  color: #f57c00;
+}
+
+.next-steps {
+  background: #d4edda;
+  border: 1px solid #c3e6cb;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.next-steps h3 {
+  margin-top: 0;
+  color: #155724;
+}
+
+.continue-button {
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 15px;
+}
+
+.continue-button:hover {
+  background: #218838;
+}
+
+.bullet-points-list {
+  padding: 0;
+}
+
+.bullet-point-item {
+  padding: 20px;
+  border-bottom: 1px solid #f0f0f0;
+  background: #fafafa;
+}
+
+.bullet-point-item:last-child {
+  border-bottom: none;
+}
+
+.bullet-text {
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+
+.bullet-meta {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.bullet-meta span {
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.action-verb {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.business-impact {
+  background: #f3e5f5;
+  color: #7b1fa2;
+}
+
+.confidence {
+  background: #fff3e0;
+  color: #f57c00;
+}
+
+.source-commit {
+  color: #666;
+  font-size: 12px;
+  font-style: italic;
+}
+
+.export-buttons {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.export-button {
+  background: #6c757d;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  min-width: 140px;
+}
+
+.export-button:hover {
+  background: #5a6268;
+}
+
+.optimization-note {
+  color: #666;
+  font-style: italic;
+  margin-top: 10px;
+  padding: 10px;
+  background: #f8f9fa;
+  border-radius: 4px;
+  border-left: 3px solid #007bff;
+}
+
+.optimization-note small {
+  font-size: 13px;
+}
+.header-with-back {
+  display: flex;
+  align-items: flex-start;
+  gap: 30px;
+  margin-bottom: 30px;
+}
+
+.back-button {
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  color: #495057;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  margin-top: 5px;
+}
+
+.back-button:hover {
+  background: #e9ecef;
+  border-color: #adb5bd;
+  color: #212529;
+}
+
+.back-button:active {
+  transform: translateY(1px);
+}
+
+.header-content {
+  flex: 1;
+  text-align: center;
+}
+
+.header-content h2 {
+  margin: 0 0 10px 0;
+}
+
+.header-content p {
+  margin: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .header-with-back {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .back-button {
+    align-self: flex-start;
+    margin-top: 0;
+  }
+  
+  .header-content {
+    text-align: left;
+  }
+}
+
+/* Button Sections */
+.next-steps {
+  background: #d4edda;
+  border: 1px solid #c3e6cb;
+  padding: 30px;
+  border-radius: 8px;
+  text-align: center;
+  margin-top: 30px;
+}
+
+.next-steps h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  color: #155724;
+}
+
+.next-steps p {
+  margin-bottom: 25px;
+  color: #155724;
+}
+
+/* All buttons consistent styling */
+.export-buttons,
+.navigation-buttons {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.navigation-buttons {
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 1px solid #c3e6cb;
+}
+
+/* Consistent button styling */
+.export-button,
+.try-again-button,
+.back-to-commits-button {
+  border: none;
+  padding: 12px 20px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 140px;
+  font-weight: 500;
+}
+
+.export-button {
+  background: #6c757d;
+  color: white;
+}
+
+.export-button:hover {
+  background: #5a6268;
+  transform: translateY(-1px);
+}
+
+.try-again-button {
+  background: #007bff;
+  color: white;
+}
+
+.try-again-button:hover {
+  background: #0056b3;
+  transform: translateY(-1px);
+}
+
+.back-to-commits-button {
+  background: #28a745;
+  color: white;
+}
+
+.back-to-commits-button:hover {
+  background: #218838;
+  transform: translateY(-1px);
+}
+
+/* Copy success state */
+.export-button.copy-success {
+  background: #28a745 !important;
+  color: white;
+}
+
+.export-button.copy-success:hover {
+  background: #218838 !important;
+}
+
+/* Print styles for PDF export */
+@media print {
+  body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    color: #000;
+  }
+  
+  h1, h2 {
+    color: #000;
+  }
+  
+  .metadata {
+    border-top: 1px solid #000;
+  }
+}

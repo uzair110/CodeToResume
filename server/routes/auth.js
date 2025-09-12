@@ -70,10 +70,23 @@ router.post('/github', async (req, res) => {
     console.error('GitHub auth error:', error.response?.data || error.message);
     
     if (error.response?.status === 401) {
-      return res.status(401).json({ message: 'Invalid GitHub token' });
+      return res.status(401).json({ 
+        message: 'Invalid GitHub token. Please check your token has repo and user scopes.',
+        details: error.response?.data?.message 
+      });
     }
     
-    res.status(500).json({ message: 'Authentication failed' });
+    if (error.response?.status === 403) {
+      return res.status(403).json({ 
+        message: 'GitHub API rate limit exceeded. Please try again later.',
+        details: error.response?.data?.message 
+      });
+    }
+    
+    res.status(500).json({ 
+      message: 'Authentication failed',
+      details: error.message 
+    });
   }
 });
 
@@ -88,6 +101,44 @@ router.get('/status', (req, res) => {
     res.json({
       authenticated: false,
       user: null
+    });
+  }
+});
+
+// Test GitHub token
+router.post('/test-token', async (req, res) => {
+  try {
+    const { token } = req.body;
+    
+    if (!token) {
+      return res.status(400).json({ message: 'Token is required' });
+    }
+
+    const response = await axios.get('https://api.github.com/user', {
+      headers: {
+        'Authorization': `token ${token}`,
+        'User-Agent': 'Commit-Resume-Generator'
+      }
+    });
+
+    // Also check token scopes
+    const scopes = response.headers['x-oauth-scopes'] || '';
+    
+    res.json({
+      valid: true,
+      user: response.data.login,
+      scopes: scopes.split(', ').filter(s => s),
+      rateLimit: {
+        remaining: response.headers['x-ratelimit-remaining'],
+        reset: response.headers['x-ratelimit-reset']
+      }
+    });
+
+  } catch (error) {
+    res.json({
+      valid: false,
+      error: error.response?.data?.message || error.message,
+      status: error.response?.status
     });
   }
 });
